@@ -10,12 +10,13 @@ const connection = mysql.createConnection({
   password: process.env.DB_PASSWORD,
   database: "avalanche_db",
 });
-//make connection to database and start app
+//make connection to database and call start function
 connection.connect((err) => {
   if (err) throw err;
   start();
 });
-//store const to start the app
+
+//store start function
 const start = () => {
   inquirer
     .prompt([
@@ -31,6 +32,7 @@ const start = () => {
           "add roles",
           "add employees",
           "update employee roles",
+          "exit",
         ],
       },
     ])
@@ -197,4 +199,10 @@ const addEmployees = () => {
         }
       );
     });
+};
+
+const updateEmployeeRole = () => {
+  //GET list of employees
+  //SELECT which employee to update
+  //UPDATE role
 };
