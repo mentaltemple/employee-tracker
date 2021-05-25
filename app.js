@@ -28,7 +28,7 @@ const start = () => {
           "add departments",
           "view employees",
           "view roles",
-          "view employees",
+          "view departments",
           "update employee roles",
         ],
       },
@@ -37,6 +37,24 @@ const start = () => {
       switch (data.choice) {
         case "add employees":
           addEmployees();
+          break;
+        case "add roles":
+          addRoles();
+          break;
+        case "add departments":
+          addDepartments();
+          break;
+        case "view employees":
+          viewEmployees();
+          break;
+        case "view roles":
+          viewRoles();
+          break;
+        case "view departments":
+          viewDepartments();
+          break;
+        case "update employee roles":
+          updateEmployeeRoles();
           break;
       }
     })
@@ -63,5 +81,21 @@ const addEmployees = () => {
         name: "managerId",
       },
     ])
-    .then((data) => {});
+    .then((data) => {
+      const query = connection.query(
+        "INSERT INTO employees SET ?",
+        {
+          first_name: data.firstName,
+          last_name: data.lastName,
+          role_id: data.roleID,
+          manager_id: data.managerId,
+        },
+        (err, res) => {
+          if (err) throw err;
+          console.log(
+            `${data.firstName} ${data.lastName} has been added to your list of employees!\n`
+          );
+        }
+      );
+    });
 };
