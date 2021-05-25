@@ -9,12 +9,12 @@ const connection = mysql.createConnection({
   password: process.env.DB_PASSWORD,
   database: "avalanche_db",
 });
-
+//make connection to database and start app
 connection.connect((err) => {
   if (err) throw err;
   start();
 });
-
+//store const to start the app
 const start = () => {
   inquirer
     .prompt([
@@ -23,37 +23,36 @@ const start = () => {
         message: "What would you like to do?",
         type: "list",
         choices: [
-          "view employees",
-          "view roles",
           "view departments",
-          "add employees",
-          "add roles",
+          "view roles",
+          "view employees",
           "add departments",
+          "add roles",
+          "add employees",
           "update employee roles",
         ],
       },
     ])
     .then((data) => {
       switch (data.choice) {
-        case "view employees":
-          viewEmployees();
+        case "view departments":
+          viewDepartments();
           break;
         case "view roles":
           viewRoles();
           break;
-        case "view departments":
-          viewDepartments();
-          break;
-        case "add employees":
-          addEmployees();
-          break;
-        case "add roles":
-          addRoles();
+        case "view employees":
+          viewEmployees();
           break;
         case "add departments":
           addDepartments();
           break;
-
+        case "add roles":
+          addRoles();
+          break;
+        case "add employees":
+          addEmployees();
+          break;
         case "update employee roles":
           updateEmployeeRoles();
           break;
@@ -65,38 +64,30 @@ const start = () => {
     .catch();
 };
 
+//view employees, roles and departments
 const viewEmployees = () => {
   connection.query("SELECT * FROM employees", (err, res) => {
     if (err) throw err;
     console.table(res);
+    start();
+  });
+};
+const viewRoles = () => {
+  connection.query("SELECT * FROM roles", (err, res) => {
+    if (err) throw err;
+    console.table(res);
+    start();
+  });
+};
+const viewDepartments = () => {
+  connection.query("SELECT * FROM department", (err, res) => {
+    if (err) throw err;
+    console.table(res);
+    start();
   });
 };
 
-const addDepartment = () => {
-  inquirer
-    .prompt([
-      {
-        message: "What is the name of the new department?",
-        name: "department",
-      },
-    ])
-    .then((data) => {
-      const query = connection.query(
-        "INSERT INTO department SET ?",
-        {
-          department_name: data.department,
-        },
-        (err, res) => {
-          if (err) throw err;
-          console.log(
-            `${data.department} has been added to your list of departments!\n`
-            //show table of all departments
-          );
-        }
-      );
-    });
-};
-
+//add employees, roles and departments
 const addEmployees = () => {
   inquirer
     .prompt([
@@ -136,7 +127,6 @@ const addEmployees = () => {
       );
     });
 };
-
 const addRoles = () => {
   inquirer
     .prompt([
@@ -164,6 +154,30 @@ const addRoles = () => {
         (err, res) => {
           if (err) throw err;
           console.log(`${data.title}  has been added to your list of roles!\n`);
+        }
+      );
+    });
+};
+const addDepartment = () => {
+  inquirer
+    .prompt([
+      {
+        message: "What is the name of the new department?",
+        name: "department",
+      },
+    ])
+    .then((data) => {
+      const query = connection.query(
+        "INSERT INTO department SET ?",
+        {
+          department_name: data.department,
+        },
+        (err, res) => {
+          if (err) throw err;
+          console.log(
+            `${data.department} has been added to your list of departments!\n`
+            //show table of all departments
+          );
         }
       );
     });
