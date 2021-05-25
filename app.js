@@ -1,5 +1,6 @@
 const mysql = require("mysql2");
 const inquirer = require("inquirer");
+const cTable = require("console.table");
 require("dotenv").config();
 
 const connection = mysql.createConnection({
@@ -64,69 +65,58 @@ const start = () => {
     .catch();
 };
 
-//view employees, roles and departments
-const viewEmployees = () => {
-  connection.query("SELECT * FROM employees", (err, res) => {
-    if (err) throw err;
-    console.table(res);
-    start();
-  });
-};
-const viewRoles = () => {
-  connection.query("SELECT * FROM roles", (err, res) => {
-    if (err) throw err;
-    console.table(res);
-    start();
-  });
-};
+//view departments, employees, and roles
 const viewDepartments = () => {
+  console.log("\nDEPARTMENTS\n");
   connection.query("SELECT * FROM department", (err, res) => {
     if (err) throw err;
     console.table(res);
     start();
   });
 };
+const viewRoles = () => {
+  console.log("\nROLES\n");
+  connection.query("SELECT * FROM roles", (err, res) => {
+    if (err) throw err;
+    console.table(res);
+    start();
+  });
+};
+const viewEmployees = () => {
+  console.log("\nEMPLOYEES\n");
+  connection.query("SELECT * FROM employees", (err, res) => {
+    if (err) throw err;
+    console.table(res);
+    start();
+  });
+};
 
-//add employees, roles and departments
-const addEmployees = () => {
+//add departments, employees, and roles
+const addDepartments = () => {
   inquirer
     .prompt([
       {
-        message: "What's the employee's first name?",
-        name: "firstName",
-      },
-      {
-        message: "What's the employee's last name?",
-        name: "lastName",
-      },
-      {
-        message: "What's the employee's role?",
-        //add function to get role
-      },
-      {
-        message: "What's the employee's manager's id?",
-        name: "managerId",
+        message: "What is the name of the new department?",
+        name: "department",
       },
     ])
     .then((data) => {
       const query = connection.query(
-        "INSERT INTO employees SET ?",
+        "INSERT INTO department SET ?",
         {
-          first_name: data.firstName,
-          last_name: data.lastName,
-          role_id: data.roleID,
-          manager_id: data.managerId,
+          department_name: data.department,
         },
         (err, res) => {
           if (err) throw err;
           console.log(
-            `${data.firstName} ${data.lastName} has been added to your list of employees!\n`
-            //show table of all employees
+            `${data.department} has been added to your list of departments!\n`
+            //show table of all departments
           );
         }
       );
     });
 };
+
 const addRoles = () => {
   inquirer
     .prompt([
@@ -160,6 +150,7 @@ const addRoles = () => {
       );
     });
 };
+//add funtionality to select from existing database
 
 // const getDepartment = () => {
 //     connection.query("SELECT * FROM department", (err, res) => {
@@ -168,26 +159,41 @@ const addRoles = () => {
 //     });
 //   },
 
-const addDepartments = () => {
+const addEmployees = () => {
   inquirer
     .prompt([
       {
-        message: "What is the name of the new department?",
-        name: "department",
+        message: "What's the employee's first name?",
+        name: "firstName",
+      },
+      {
+        message: "What's the employee's last name?",
+        name: "lastName",
+      },
+      {
+        message: "What's the employee's role id?",
+        name: "role",
+      },
+      {
+        message: "What's the employee's manager's id?",
+        name: "managerId",
       },
     ])
     .then((data) => {
       const query = connection.query(
-        "INSERT INTO department SET ?",
+        "INSERT INTO employees SET ?",
         {
-          department_name: data.department,
+          first_name: data.firstName,
+          last_name: data.lastName,
+          roles_id: data.role,
+          manager_id: data.managerId,
         },
         (err, res) => {
           if (err) throw err;
           console.log(
-            `${data.department} has been added to your list of departments!\n`
-            //show table of all departments
+            `${data.firstName} ${data.lastName} has been added to your list of employees!\n`
           );
+          viewEmployees();
         }
       );
     });
