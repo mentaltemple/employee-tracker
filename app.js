@@ -138,10 +138,11 @@ const addRoles = () => {
         message: "What is the salary of the new role?",
         name: "salary",
       },
-      //   {
-      //     message: "What is the department id of the new role?",
-      //     name: "departmentId",
-      //   },
+      {
+        input: "number",
+        message: "What will be the department id for this new role?",
+        name: "department",
+      },
     ])
     .then((data) => {
       const query = connection.query(
@@ -149,16 +150,25 @@ const addRoles = () => {
         {
           title: data.title,
           salary: data.salary,
-          //   departments_id: data.departmentId,
+          department_id: data.department,
         },
         (err, res) => {
           if (err) throw err;
-          console.log(`${data.title}  has been added to your list of roles!\n`);
+          console.log(`${data.title} has been added to your list of roles!\n`);
+          start();
         }
       );
     });
 };
-const addDepartment = () => {
+
+// const getDepartment = () => {
+//     connection.query("SELECT * FROM department", (err, res) => {
+//       if (err) throw err;
+//       console.log(res);
+//     });
+//   },
+
+const addDepartments = () => {
   inquirer
     .prompt([
       {
