@@ -8,7 +8,7 @@ const connection = mysql.createConnection({
   port: 3306,
   user: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE,
+  database: "avalanche_db",
 });
 //make connection to database and call start function
 connection.connect((err) => {
@@ -114,8 +114,7 @@ const addDepartments = () => {
             `${data.department} has been added to your list of departments!\n`
             //show table of all departments
           );
-          viewDepartments();
-          start();
+          console.table();
         }
       );
     });
@@ -133,8 +132,9 @@ const addRoles = () => {
         name: "salary",
       },
       {
+        type: "list",
         input: "number",
-        message: "What will be the department id # for this new role?",
+        message: "What will be the department id for this new role?",
         name: "department",
       },
     ])
@@ -149,22 +149,57 @@ const addRoles = () => {
         (err, res) => {
           if (err) throw err;
           console.log(`${data.title} has been added to your list of roles!\n`);
-          viewRoles();
           start();
         }
       );
     });
 };
-//add functionality to select from existing database
+//add functionality to select from existing database when creating new employee
 
 // const getDepartment = () => {
-//     connection.query("SELECT * FROM department", (err, res) => {
-//       if (err) throw err;
-//       console.log(res);
+//   connection.query("SELECT department_name FROM department", (err, res) => {
+//     if (err) throw err;
+
+//     let departments = [];
+//     //create an empty array var, loop thru array of objects, pull dpt name, push into empty array
+//     res.forEach((deptObj) => {
+//       let depName = deptObj.department_name;
+//       departments.push(depName);
 //     });
-//   },
+//     console.log(departments);
+//     return departments;
+
+//     //return final results array
+//   });
+// };
+
+// getDepartment();
+
+// const getRoles = () => {
+//   connection.query("SELECT * FROM roles", (err, res) => {
+//     let roles = res.map(({ id, title }) => ({
+//       name: `${title}`,
+//       value: id,
+//     }));
+
+//     return roles;
+//   });
+// };
+// const roles = getRoles();
 
 const addEmployees = () => {
+  connection.query(
+    "SELECT * FROM employees WHERE manager_id IS null",
+    (err, res) => {
+      const managers = res.map(({ id, first_name, last_name }) => ({
+        name: `${first_name} ${last_name}`,
+        value: id,
+      }));
+      managers.unshift({
+        name: "None",
+        value: null,
+      });
+
   inquirer
     .prompt([
       {
@@ -176,12 +211,12 @@ const addEmployees = () => {
         name: "lastName",
       },
       {
-        message: "What's the employee's role id?",
-        name: "role",
+        message: "What is the employee's manager's id?",
+        name: "managerId",
       },
       {
-        message: "What's the employee's manager's id?",
-        name: "managerId",
+        message: "What is the employee's role id?",
+        name: "role",
       },
     ])
     .then((data) => {
@@ -204,41 +239,9 @@ const addEmployees = () => {
     });
 };
 
-const updateEmployeeRoles = () => {
+const updateEmployeeRole = () => {
   //GET list of employees
-  connection.query("SELECT * FROM employees", (err, res) => {
-    const employees = res.map(({ id, first_name, last_name }) => ({
-      name: `${first_name} ${last_name}`,
-      value: id,
-    }));
-    //SELECT which employee to update
-    inquirer
-      .prompt([
-        {
-          type: "list",
-          message: "What employee would you like to update?",
-          choices: employees,
-          name: "employee",
-        },
-        {
-          type: "number",
-          message: "What is the employee's new role #?",
-          name: "newRole",
-        },
-      ])
-      .then((data) => {
-        //UPDATE role
-        const query = connection.query("UPDATE employees SET ? WHERE ?", [
-          {
-            roles_id: `${data.newRole}`,
-          },
-          {
-            id: `${data.employee}`,
-          },
-        ]);
-        console.log(`Your employee's role has been updated!`);
-
-        start();
-      });
-  });
+  //SELECT which employee to update
+  //UPDATE role
 };
+
