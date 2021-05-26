@@ -25,17 +25,17 @@ node app.js
 
 ## Usage
 
-You will be presented with a series of prompts. Navigate through the questions to utilize the view, add and update features.
+You will be presented with a series of prompts. Navigate through the questions to utilize the 'view', 'add' and 'update' features.
 
-![Homepage screen shot](./Assets/note-taker-home.png)
-
-![Note page screen shot](./Assets/note-taker-notes.png)
+video demo: https://drive.google.com/drive/folders/1R8id6r92EqlHzrT0OjWuHdPOndFldLSc?usp=sharing
 
 ## Credits
 
 Special thanks to:
 
 -Brian Ford (Tutor)
+
+-Zac Stowell (TA)
 
 -AskBCS Learning Assistant
 
@@ -48,8 +48,6 @@ No testing available at this time.
 For additional questions, you can check out my GitHub profile:
 
 https://github.com/mentaltemple
-
-or email me at mentaltemple@yahoo.com.
 
 ## License
 
