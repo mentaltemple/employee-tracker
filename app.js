@@ -114,7 +114,7 @@ const addDepartments = () => {
             `${data.department} has been added to your list of departments!\n`
             //show table of all departments
           );
-          viewDepartments();
+
           start();
         }
       );
@@ -149,7 +149,7 @@ const addRoles = () => {
         (err, res) => {
           if (err) throw err;
           console.log(`${data.title} has been added to your list of roles!\n`);
-          viewRoles();
+
           start();
         }
       );
@@ -198,7 +198,7 @@ const addEmployees = () => {
           console.log(
             `${data.firstName} ${data.lastName} has been added to your list of employees!\n`
           );
-          viewEmployees();
+          start();
         }
       );
     });
